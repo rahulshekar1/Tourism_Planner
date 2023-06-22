@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Karnataka Travel Planner</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+        <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+        <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js'></script>
+        <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css' type='text/css' />
+        <style>
+            #map {
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              width: 1695px;
+            }
+        </style>
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <a class="navbar-brand ps-3" href="index.html">Karnataka Trip Planner</a>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sign-turn-slight-right-fill" viewBox="0 0 16 16">
+                                    <path d="M6.95.435c.58-.58 1.52-.58 2.1 0l6.515 6.516c.58.58.58 1.519 0 2.098L9.05 15.565c-.58.58-1.519.58-2.098 0L.435 9.05a1.482 1.482 0 0 1 0-2.098L6.95.435Zm1.385 6.547.8 1.386a.25.25 0 0 0 .451-.039l1.06-2.882a.25.25 0 0 0-.192-.333l-3.026-.523a.25.25 0 0 0-.26.371l.667 1.154-.621.373A2.5 2.5 0 0 0 6 8.632V11h1V8.632a1.5 1.5 0 0 1 .728-1.286l.607-.364Z"/>
+                                  </svg></i></div>
+                                  Direction
+                            </a>
+                            <a class="nav-link" href="nearme.html">
+                                <div class="sb-nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z"/>
+                                  </svg>
+                                </div>
+                                NEAR ME!
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div id="map"></div>
+                    <script>
+                    mapboxgl.accessToken = 'pk.eyJ1IjoicmFodWxzaGVrYXIzNiIsImEiOiJjbGkwN2V2bzQwMWFqM2VxdHN0d2JqYmNjIn0.80D19gZMovIsTUul0dxRfg';
+                    
+                    // Retrieve current location coordinates using Geolocation API
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+                    } else {
+                        console.log('Geolocation is not supported by this browser.');
+                    }
+                    
+                    function successCallback(position) {
+                        const currentCoordinates = [position.coords.longitude, position.coords.latitude];
+                        
+                        const map = new mapboxgl.Map({
+                        container: 'map',
+                        style: 'mapbox://styles/rahulshekar36/cliyelkle015i01qv2kytc8o1',
+                        center: currentCoordinates,
+                        zoom: 10.7
+                        });
+                        
+                        const directions = new MapboxDirections({
+                        accessToken: mapboxgl.accessToken,
+                        unit: 'metric',
+                        profile: 'mapbox/driving',
+                        interactive: false,
+                        });
+                        map.addControl(directions, 'top-left');
+                        
+                        let waypoints = [];
+                        
+                        map.on('click', (event) => {
+                        // if (waypoints.length >= 10) {
+                        //   return;
+                        // }
+                        
+                        const features = map.queryRenderedFeatures(event.point, {
+                            layers: ['kar-tour1'],
+                        });
+                        if (features.length === 0) {
+                            return;
+                        }
+                        
+                        const coordinates = features[0].geometry.coordinates;
+                        
+                        waypoints.push(coordinates);
+                        
+                        if (waypoints.length >= 2) {
+                            const origin = waypoints[0];
+                            const destination = waypoints[waypoints.length - 1];
+                            const intermediates = waypoints.slice(1, waypoints.length - 1);
+                        
+                            directions.setOrigin(origin);
+                            directions.setDestination(destination);
+                            directions.setWaypoints(intermediates);
+                        }
+                        });
+                    }
+                    
+                    function errorCallback(error) {
+                        console.log('Error retrieving current location:', error);
+                    }
+                    </script>
+                </main>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script src="assets/demo/chart-area-demo.js"></script>
+        <script src="assets/demo/chart-bar-demo.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="js/datatables-simple-demo.js"></script>
+    </body>
+</html>
